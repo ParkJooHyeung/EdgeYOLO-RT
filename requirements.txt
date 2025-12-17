@@ -1,0 +1,7 @@
+ultralytics
+opencv-python
+numpy
+pandas
+tqdm
+# NOTE: install torch separately matching your CUDA version, e.g.:
+# pip install --index-url https://download.pytorch.org/whl/cu122 torch
