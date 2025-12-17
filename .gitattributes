@@ -1,0 +1,2 @@
+optimized/*.trt filter=lfs diff=lfs merge=lfs -text
+optimized/*.onnx filter=lfs diff=lfs merge=lfs -text
