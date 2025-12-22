@@ -24,3 +24,17 @@ jobs:
           else
             echo "No python files to compile"
           fi
+
+  baseline-smoke:
+    runs-on: ubuntu-latest
+    needs: lint-and-compile
+    steps:
+      - uses: actions/checkout@v4
+      - name: Setup Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.10'
+      - name: Run baseline smoke (no-fail)
+        run: |
+          echo "Running baseline smoke: will not fail CI if dependencies missing"
+          python scripts/baseline_yolov8.py --model yolov8n.pt --images images --max_images 1 || true
