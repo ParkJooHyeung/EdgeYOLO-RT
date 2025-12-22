@@ -99,12 +99,25 @@ CI: a lightweight GitHub Actions workflow is included at `.github/workflows/ci.y
 
 - **Phase 2. 모델 변환 (ONNX Bridge)**
   - [x] Step 2-1: .pt → .onnx 변환 (`yolov8n.onnx`, opset=12)
-  - [ ] Step 2-2: 모델 구조 확인 (Netron에서 Input/Output 노드 확인)
+  - [x] Step 2-2: 모델 구조 확인 (Netron에서 Input/Output 노드 확인)
 
 - **Phase 3. TensorRT 엔진 빌드 및 CLI 테스트**
   - [x] `trtexec` / TensorRT 설치 확인 (trtexec 사용 가능)
-  - [ ] Step 3-1: FP32 vs FP16 엔진 빌드 및 성능 기록
-  - [ ] Step 3-2: 레이어 프로파일링 (`trtexec --dumpProfile`)
+  - [x] Step 3-1: FP32 vs FP16 엔진 빌드 및 성능 기록
+  - [x] Step 3-2: 레이어 프로파일링 (`trtexec --dumpLayerInfo`)
+
+  **Phase 2~3 Results (요약)**
+
+  - **Simplified ONNX:** [optimized/simplified_yolov8n.onnx](optimized/simplified_yolov8n.onnx)
+  - **Layer info (dump):** [optimized/layer_info.txt](optimized/layer_info.txt)
+  - **FP16 TensorRT engine:** [optimized/model.trt](optimized/model.trt)
+    - Engine size: ~9.28 MiB
+    - Observed perf (trtexec): GPU latency ≈ 0.715 ms, Throughput ≈ 1401 qps
+  - **FP32 TensorRT engine:** [optimized/model_fp32.trt](optimized/model_fp32.trt)
+    - Engine size: ~21.39 MiB
+    - Observed perf (trtexec): mean host latency ≈ 1.897 ms, GPU compute mean ≈ 1.307 ms, Throughput ≈ 763 qps
+
+  > 해당 산출물들은 `optimized/` 및 `results/` 폴더에 저장되어 있습니다. 자세한 trtexec 로그와 프로파일링 결과는 layer_info.txt 및 각 엔진 빌드 로그를 참조하세요.
 
 - **Phase 4. C++ Inference Engine 구현 (핵심 파트)**
   - [ ] Step 4-1: 프로젝트 세팅 (CMakeLists, 라이브러리 링크)
