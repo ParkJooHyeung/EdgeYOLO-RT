@@ -1,0 +1,6 @@
+preset: ci_smoke
+max_images: 5
+pre_ms_avg: 3.9866
+inf_ms_avg: 121.6588
+post_ms_avg: 0.0646
+total_ms_avg: 125.71000000000001

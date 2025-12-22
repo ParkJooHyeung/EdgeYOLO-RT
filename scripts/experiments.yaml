@@ -27,3 +27,10 @@ small_sweep:
   max_images: 200
   lr: [0.01, 0.001]
   augment: true
+
+ci_smoke:
+  name: ci_smoke
+  imgsz: [640, 640]
+  batch: 1
+  max_images: 5
+  augment: false

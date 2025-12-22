@@ -20,12 +20,37 @@ def load_presets(path):
         return yaml.safe_load(f)
 
 
-def run_baseline(preset_name, cfg):
+def summarize_csv(csv_path):
+    import csv
+    vals = {'pre': [], 'inf': [], 'post': [], 'total': []}
+    try:
+        with open(csv_path, 'r') as f:
+            reader = csv.reader(f)
+            next(reader, None)
+            for r in reader:
+                if not r or r[0] == '' or r[0].lower() == 'avg':
+                    continue
+                try:
+                    vals['pre'].append(float(r[1]))
+                    vals['inf'].append(float(r[2]))
+                    vals['post'].append(float(r[3]))
+                    vals['total'].append(float(r[4]))
+                except Exception:
+                    continue
+    except FileNotFoundError:
+        return None
+    summary = {}
+    for k, arr in vals.items():
+        summary[k] = sum(arr) / len(arr) if arr else None
+    return summary
+
+
+def run_baseline(preset_name, cfg, override_max=None):
     out_dir = os.path.join(HERE, '..', 'results')
     os.makedirs(out_dir, exist_ok=True)
     out_csv = os.path.join(out_dir, f'{preset_name}_baseline.csv')
     imgsz = cfg.get('imgsz', [640, 640])
-    max_images = cfg.get('max_images', 100)
+    max_images = override_max if override_max is not None else cfg.get('max_images', 100)
     cmd = ["./venv/bin/python", os.path.join(HERE, 'baseline_yolov8.py'),
            '--model', os.path.join(HERE, '..', 'yolov8n.pt'),
            '--images', os.path.join(HERE, '..', 'images'),
@@ -37,6 +62,16 @@ def run_baseline(preset_name, cfg):
         subprocess.check_call(cmd)
     except subprocess.CalledProcessError:
         print('Baseline run failed (this can happen if dependencies are missing).')
+    # Summarize results if CSV produced
+    summary = summarize_csv(out_csv)
+    if summary is not None:
+        summary_path = os.path.join(out_dir, f'{preset_name}_summary.txt')
+        with open(summary_path, 'w') as f:
+            f.write(f"preset: {preset_name}\n")
+            f.write(f"max_images: {max_images}\n")
+            for k, v in summary.items():
+                f.write(f"{k}_ms_avg: {v if v is not None else 'N/A'}\n")
+        print('Wrote summary to', summary_path)
 
 
 def main():

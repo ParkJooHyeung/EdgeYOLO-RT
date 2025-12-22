@@ -30,7 +30,8 @@ def simplify_onnx(src, dst):
 
 def build_trt(onnx_path, out_dir, fp16=False, int8=False):
     trt_file = os.path.join(out_dir, 'model.trt')
-    cmd = ['trtexec', f'--onnx={onnx_path}', f'--saveEngine={trt_file}', '--workspace=2048']
+    # Avoid unsupported flags across trtexec versions; keep command minimal
+    cmd = ['trtexec', f'--onnx={onnx_path}', f'--saveEngine={trt_file}']
     if fp16:
         cmd.append('--fp16')
     if int8:
