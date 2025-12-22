@@ -11,6 +11,8 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+        with:
+          lfs: true
       - name: Setup Python
         uses: actions/setup-python@v4
         with:
@@ -30,6 +32,8 @@ jobs:
     needs: lint-and-compile
     steps:
       - uses: actions/checkout@v4
+        with:
+          lfs: true
       - name: Setup Python
         uses: actions/setup-python@v4
         with:
@@ -38,3 +42,14 @@ jobs:
         run: |
           echo "Running baseline smoke: will not fail CI if dependencies missing"
           python scripts/baseline_yolov8.py --model yolov8n.pt --images images --max_images 1 || true
+
+      - name: Upload optimized artifacts (if present)
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: optimized-artifacts
+          path: |
+            optimized/*.trt
+            optimized/*.onnx
+            optimized/layer_info.txt
+            results/**
