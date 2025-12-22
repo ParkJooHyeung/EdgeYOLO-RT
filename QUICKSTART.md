@@ -36,3 +36,17 @@ PY
 5) TensorRT
 
 Install `trtexec`/TensorRT from NVIDIA apt repo or use an NVIDIA Docker image with TensorRT.
+
+6) Model optimization (optional)
+
+```bash
+# Simplify ONNX and optionally build TensorRT engine (requires onnxsim/trtexec)
+python scripts/optimize_model.py --onnx yolov8n.onnx --out-dir optimized --trt --fp16
+
+# If you only want to simplify ONNX:
+python scripts/optimize_model.py --onnx yolov8n.onnx --out-dir optimized
+```
+
+7) Experiments
+
+Simple experiment presets are provided in `scripts/experiments.yaml` for quick sweeps.

@@ -1,0 +1,29 @@
+# Preset experiment configurations for quick hyperparameter sweeps
+# This file is consumed manually or by simple experiment runners.
+
+default:
+  name: default
+  imgsz: [640, 640]
+  batch: 1
+  max_images: 1000
+  augment: false
+
+augmented:
+  name: augmented
+  imgsz: [640, 640]
+  batch: 1
+  max_images: 1000
+  augment: true
+  augmentations:
+    - hflip: 0.5
+    - vflip: 0.1
+    - hsv_h: 0.015
+    - hsv_s: 0.7
+
+small_sweep:
+  name: small_sweep
+  imgsz: [640, 640]
+  batch: 1
+  max_images: 200
+  lr: [0.01, 0.001]
+  augment: true

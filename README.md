@@ -72,6 +72,22 @@ pip install ultralytics
 python export.py --weights yolov8s.pt --dest model.onnx
 ```
 
+## 🔧 Python Utilities
+
+This repo includes Python helper scripts in the `scripts/` folder:
+
+- `scripts/baseline_yolov8.py`: run baseline timings and produce `baseline_result.csv`.
+- `scripts/optimize_model.py`: simplify ONNX models and optionally build a TensorRT engine using `trtexec`.
+- `scripts/experiments.yaml`: small presets for augmentation/hyperparameter sweeps.
+
+Quick example: simplify and build FP16 TensorRT engine
+
+```bash
+python scripts/optimize_model.py --onnx yolov8n.onnx --out-dir optimized --trt --fp16
+```
+
+CI: a lightweight GitHub Actions workflow is included at `.github/workflows/ci.yml` that verifies Python files compile.
+
 ## **Curriculum Progress (Checklist)**
 
 아래는 사용자가 제시한 커리큘럼을 기준으로 현재 진행 상태를 정리한 체크리스트입니다. 완료된 항목은 체크되어 있습니다.
